@@ -7,29 +7,40 @@ dependencies = [
     "asyncpg>=0.32.0",
     "fastapi>=0.162.0",
     "google-cloud-storage>=3.17.1",
+    "google-genai>=3.6.1",
+    "openai>=3.55.1",
     "pydantic-settings>=2.16.2",
-    "ruff>=0.17.3",
     "sqlalchemy[asyncio]>=2.1.6",
     "uvicorn>=0.54.0",
 ]
 
-[tool.ruff]
-target-version = "py314"
-line-length = 88
-
-[tool.ruff.lint]
-select = [
-    "E4",  # Import errors
-    "E7",  # Statement errors
-    "E9",  # Runtime errors
-    "F",   # Pyflakes
-    "I",   # Import sorting
-    "UP",  # Python syntax modernization
-    "B",   # Common bugs
-    "SIM", # Code simplification
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.2.0",
+    "pytest-asyncio>=1.5.0",
+    "ruff>=0.17.3",
 ]
 
+[tool.fastapi]
+entrypoint = "app.main:app"
+
+[tool.ruff]
+extend-exclude = ["alembic/versions"]
+
+[tool.ruff.lint]
+extend-select = [
+    "FAST", # flake8-fastapi
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101"]
+
 [tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-line-ending = "auto"
+docstring-code-format = true
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+testpaths = ["tests"]
